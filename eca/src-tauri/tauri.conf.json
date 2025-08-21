@@ -5,7 +5,7 @@
   "identifier": "com.huangjiarui.eca",
   "build": {
     "beforeDevCommand": "pnpm dev",
-    "devUrl": "http://localhost:3002",
+    "devUrl": "http://localhost:3000",
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../dist"
   },
@@ -30,6 +30,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
+    ],
+    "externalBin": [
+      "binaries/crawler-sidecar"
     ]
   }
 }
