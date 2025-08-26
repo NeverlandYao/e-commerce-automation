@@ -1,12 +1,74 @@
 'use client';
 
-import { useSystemStore, useTaskStore } from '@/store';
+import { useEffect } from 'react';
+import { useSystemStore, useTaskStore, useNotificationStore } from '@/store';
 import { useAnalytics } from '@/hooks';
 
 export default function DashboardPage() {
-  const { systemStatus } = useSystemStore();
-  const { tasks, activeTasks } = useTaskStore();
+  const { systemStatus, setSystemStatus } = useSystemStore();
+  const { tasks, activeTasks, addTask } = useTaskStore();
+  const { addNotification } = useNotificationStore();
   const { data: analytics, isLoading } = useAnalytics();
+
+  // 添加一些示例数据和通知
+  useEffect(() => {
+    // 模拟系统状态
+    setSystemStatus({
+      cpu: 45,
+      memory: 67,
+      disk: 32,
+      network: {
+        upload: 1.2,
+        download: 5.8,
+      },
+      services: {
+        backend: true,
+        scriptsService: true,
+        database: true,
+        redis: false,
+      },
+    });
+
+    // 添加示例通知
+    addNotification({
+      type: 'success',
+      title: '任务完成',
+      message: '商品抓取任务已成功完成，共获取2,345个商品信息',
+    });
+
+    addNotification({
+      type: 'warning',
+      title: '系统提醒',
+      message: 'Redis服务连接异常，请检查服务状态',
+    });
+
+    addNotification({
+      type: 'info',
+      title: '新功能上线',
+      message: '智能价格分析功能已上线，欢迎体验',
+    });
+
+    // 添加示例任务
+    addTask({
+      id: '1',
+      name: '京东商品抓取',
+      type: 'crawler',
+      status: 'running',
+      progress: 75,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    addTask({
+      id: '2',
+      name: '商品价格分析',
+      type: 'analysis',
+      status: 'pending',
+      progress: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }, [setSystemStatus, addNotification, addTask]);
 
   if (isLoading) {
     return (
