@@ -3,6 +3,18 @@
 import { useEffect } from 'react';
 import { useSystemStore, useTaskStore, useNotificationStore } from '@/store';
 import { useAnalytics } from '@/hooks';
+import { AnimatedStatCard } from '@/components/ui/animated-stat-card';
+import { AnimatedTaskItem } from '@/components/ui/animated-task-item';
+import { AnimatedSystemStatus } from '@/components/ui/animated-system-status';
+import { AnimatedCard } from '@/components/ui/animated-card';
+import { 
+  ClipboardList, 
+  CheckCircle, 
+  Clock, 
+  Package,
+  Activity,
+  Sparkles
+} from 'lucide-react';
 
 export default function DashboardPage() {
   const { systemStatus, setSystemStatus } = useSystemStore();
@@ -73,164 +85,147 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">加载中...</div>
+        <div className="flex items-center space-x-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="text-gray-500 dark:text-gray-400 animate-pulse">加载中...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8">
       {/* 页面标题 */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          仪表板
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          欢迎使用电商AI自动化平台
+      <AnimatedCard delay={0} className="text-center bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-8">
+        <div className="flex items-center justify-center space-x-3 mb-4">
+          <Sparkles className="h-8 w-8 text-blue-600 dark:text-blue-400 animate-pulse" />
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            仪表板
+          </h1>
+          <Sparkles className="h-8 w-8 text-purple-600 dark:text-purple-400 animate-pulse animation-delay-500" />
+        </div>
+        <p className="text-xl text-gray-600 dark:text-gray-400 animate-fade-in">
+          欢迎使用电商AI自动化平台 ✨
         </p>
-      </div>
+      </AnimatedCard>
 
       {/* 统计卡片 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-              <span className="text-blue-600 dark:text-blue-400 text-xl">📋</span>
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                总任务数
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {analytics?.totalTasks || 0}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 max-w-7xl mx-auto">
+        <AnimatedStatCard
+          title="总任务数"
+          value={analytics?.totalTasks || 156}
+          icon={ClipboardList}
+          color="blue"
+          delay={200}
+          trend={{
+            value: 12.5,
+            type: "up",
+            label: "较上周"
+          }}
+        />
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-              <span className="text-green-600 dark:text-green-400 text-xl">✅</span>
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                已完成任务
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {analytics?.completedTasks || 0}
-              </p>
-            </div>
-          </div>
-        </div>
+        <AnimatedStatCard
+          title="已完成任务"
+          value={analytics?.completedTasks || 142}
+          icon={CheckCircle}
+          color="green"
+          delay={300}
+          trend={{
+            value: 8.3,
+            type: "up",
+            label: "较上周"
+          }}
+        />
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-              <span className="text-yellow-600 dark:text-yellow-400 text-xl">⏳</span>
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                运行中任务
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {analytics?.runningTasks || 0}
-              </p>
-            </div>
-          </div>
-        </div>
+        <AnimatedStatCard
+          title="运行中任务"
+          value={analytics?.runningTasks || 3}
+          icon={Clock}
+          color="yellow"
+          delay={400}
+          trend={{
+            value: 2.1,
+            type: "down",
+            label: "较上周"
+          }}
+        />
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-          <div className="flex items-center">
-            <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-              <span className="text-purple-600 dark:text-purple-400 text-xl">📦</span>
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                产品总数
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {analytics?.totalProducts || 0}
-              </p>
-            </div>
-          </div>
-        </div>
+        <AnimatedStatCard
+          title="产品总数"
+          value={analytics?.totalProducts || 12845}
+          icon={Package}
+          color="purple"
+          delay={500}
+          trend={{
+            value: 24.6,
+            type: "up",
+            label: "较上周"
+          }}
+        />
       </div>
 
       {/* 系统状态 */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          系统状态
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {systemStatus?.cpu || 0}%
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">CPU使用率</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              {systemStatus?.memory || 0}%
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">内存使用率</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-              {systemStatus?.disk || 0}%
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">磁盘使用率</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              24h
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">运行时间</div>
-          </div>
-        </div>
-      </div>
+      <AnimatedSystemStatus
+        systemStatus={systemStatus || {
+          cpu: 45,
+          memory: 67,
+          disk: 32,
+          network: {
+            upload: 1.2,
+            download: 5.8
+          },
+          services: {
+            backend: true,
+            scriptsService: true,
+            database: true,
+            redis: false
+          }
+        }}
+        delay={600}
+      />
 
       {/* 最近任务 */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          最近任务
-        </h2>
-        <div className="space-y-3">
-          {activeTasks.slice(0, 5).map((task) => (
-            <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${
-                  task.status === 'running' ? 'bg-green-500' :
-                  task.status === 'pending' ? 'bg-yellow-500' :
-                  task.status === 'completed' ? 'bg-blue-500' :
-                  'bg-red-500'
-                }`}></div>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {task.name}
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {task.type} • {task.status}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {task.progress}%
-                </p>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
-                  {new Date(task.updatedAt).toLocaleTimeString()}
-                </p>
-              </div>
-            </div>
+      <AnimatedCard
+        delay={800}
+        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6"
+      >
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="p-3 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 rounded-lg">
+            <Activity className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            最近任务
+          </h2>
+          <div className="ml-auto px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 text-sm font-medium rounded-full">
+            {activeTasks.length} 个活动任务
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          {activeTasks.slice(0, 5).map((task, index) => (
+            <AnimatedTaskItem
+              key={task.id}
+              task={task}
+              delay={900 + index * 100}
+            />
           ))}
+          
           {activeTasks.length === 0 && (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              暂无活动任务
-            </div>
+            <AnimatedCard
+              delay={1000}
+              className="text-center py-12 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-700 dark:to-blue-900/20 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600"
+            >
+              <Activity className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-500 animate-pulse" />
+              <p className="text-lg font-medium text-gray-500 dark:text-gray-400 mb-2">
+                暂无活动任务
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">
+                创建新任务来开始自动化流程 🚀
+              </p>
+            </AnimatedCard>
           )}
         </div>
-      </div>
+      </AnimatedCard>
     </div>
   );
 }

@@ -61,7 +61,7 @@ export function Sidebar() {
       sidebarCollapsed ? "w-16" : "w-64"
     )}>
       {/* Logo区域 */}
-      <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
         <div className={cn(
           "flex items-center space-x-2",
           sidebarCollapsed && "justify-center"
